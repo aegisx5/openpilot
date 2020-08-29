@@ -23,10 +23,9 @@ RATE = 100.0
 def long_control_state_trans(active, long_control_state, v_ego, v_target, v_pid,
                              output_gb, brake_pressed, gas_pressed, avh_active, op_paused, standstill, cruise_on, stop):
   """Update longitudinal control state machine"""
- 
-  stopping_condition = stop or (v_ego < 2.0 and standstill)
 
   starting_condition = v_target > STARTING_TARGET_SPEED
+  stopping_condition = stop or (v_ego < 2.0 and standstill and not starting_condition)
 
   if (not active) or brake_pressed or gas_pressed or avh_active or op_paused or (not cruise_on):
     long_control_state = LongCtrlState.off
