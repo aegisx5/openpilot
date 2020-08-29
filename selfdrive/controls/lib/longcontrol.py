@@ -24,7 +24,7 @@ def long_control_state_trans(active, long_control_state, v_ego, v_target, v_pid,
                              output_gb, brake_pressed, gas_pressed, avh_active, op_paused, standstill, cruise_on, stop):
   """Update longitudinal control state machine"""
  
-  stopping_condition = stop or ((v_ego < 2.0 and standstill) and (v_target < STARTING_TARGET_SPEED))
+  stopping_condition = stop or (v_ego < 2.0 and standstill)
 
   starting_condition = v_target > STARTING_TARGET_SPEED
 
@@ -45,9 +45,7 @@ def long_control_state_trans(active, long_control_state, v_ego, v_target, v_pid,
         long_control_state = LongCtrlState.starting
 
     elif long_control_state == LongCtrlState.starting:
-      if stopping_condition:
-        long_control_state = LongCtrlState.stopping
-      elif output_gb >= -BRAKE_THRESHOLD_TO_PID:
+      if output_gb >= -BRAKE_THRESHOLD_TO_PID:
         long_control_state = LongCtrlState.pid
 
   return long_control_state
