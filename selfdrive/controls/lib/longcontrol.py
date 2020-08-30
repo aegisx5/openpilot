@@ -44,7 +44,7 @@ def long_control_state_trans(active, long_control_state, v_ego, v_target, v_pid,
         long_control_state = LongCtrlState.starting
 
     elif long_control_state == LongCtrlState.starting:
-      if output_gb >= -BRAKE_THRESHOLD_TO_PID:
+      if output_gb >= 0:
         long_control_state = LongCtrlState.pid
 
   return long_control_state
@@ -138,6 +138,7 @@ class LongControl():
         factor = interp(dRel,[0.0,2.0,4.0,6.0], [0.5,0.5,1.0,2.0])
       if output_gb < 0.1:
         output_gb += (STARTING_BRAKE_RATE * factor) / RATE
+      output_gb = 0.5
       self.v_pid = CS.vEgo
       self.pid.reset()
 
